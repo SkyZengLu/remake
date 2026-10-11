@@ -29,6 +29,8 @@ export function trigger(
         if (!effect) return
         if (effect.LIF) draft.life += effect.LIF
         const pe: Partial<Properties> = {}
+        // 年龄变化：转世重生 / 时光倒流 / 回到年轻时候等
+        if (effect.AGE) pe.age = effect.AGE
         if (effect.CHR) pe.charm = effect.CHR
         if (effect.INT) pe.intelligence = effect.INT
         if (effect.STR) pe.strength = effect.STR
