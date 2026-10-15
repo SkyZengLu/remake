@@ -22,6 +22,30 @@ export const LuckyMultiplier = 3
 /** 先天道体的悟道权重倍率 */
 export const DaoMultiplier = 3
 
+/**
+ * 气运之子**不**加权的事件（逐个判定后排除）。
+ * 这些事件虽然含正向增益，但净收益不为正、或属于随机噪声事件，
+ * 不应被气运之子放大。
+ */
+export const LuckyExcludedEvents = new Set<Event['id']>([
+    10217, // 被同学骗沾染毒品。体质-2 家境-1 快乐+1
+    10314, // 你有点失忆，忘掉了不少东西。智力-3 快乐+1
+    11290, // 你依靠生命维持装置活着。颜值-1 智力-1 体质-1 快乐+1
+    11291, // 外界一年，虚拟世界中十年。智力-1 体质-1 快乐+1
+    11335, // 乱码事件：智力-1 体质+1
+    11336, // 乱码事件：智力-1 家境+1
+    11337, // 乱码事件：智力-1 快乐+1
+    11338, // 乱码事件：颜值+1 智力-1
+    11339, // 乱码事件：颜值+2 智力-1
+    11340, // 乱码事件：智力-1 体质+2
+    11341, // 乱码事件：智力-1 家境+2
+    11342, // 乱码事件：智力-1 快乐+2
+    11343, // 乱码事件：智力-1 体质+3
+    11344, // 乱码事件：颜值+3 智力-1
+    11345, // 乱码事件：智力-1 家境+3
+    11346, // 乱码事件：智力-1 快乐+3
+])
+
 /** 「悟出大道」类事件的识别 */
 const DaoEventPattern = /悟出.*大道/
 const daoEventCache = new Map<Event['id'], boolean>()
@@ -35,6 +59,8 @@ function isDaoEvent(id: Event['id']): boolean {
 
 /** 事件是否增加属性（至少一项为正） */
 function isPositivePropEvent(id: Event['id']): boolean {
+    // 经逐个判定排除的事件不参与气运之子加权
+    if (LuckyExcludedEvents.has(id)) return false
     const { effect } = events.get(id)!
     if (!effect) return false
     return (

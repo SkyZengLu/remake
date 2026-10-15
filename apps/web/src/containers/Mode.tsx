@@ -1,9 +1,12 @@
 import { PullCount } from '@/config'
 import { useModeChoose } from '@remake/hooks'
+import { useCheatMode } from '@/storage/cheat'
 import './Mode.css'
 
 export function Mode() {
     const [Mode, choose] = useModeChoose()
+    // 【作弊模式】只有导入带 cheatmode 标记的存档才会出现
+    const cheatMode = useCheatMode()
     return (
         <div className="screen mode">
             <button onClick={() => choose(Mode.Classic)}>
@@ -26,6 +29,15 @@ export function Mode() {
                     <span>最多可选10个</span>
                 </div>
             </button>
+            {cheatMode && (
+                <button onClick={() => choose(Mode.Cheat)}>
+                    <div className="name">作弊模式</div>
+                    <div className="description">
+                        <span>列出全部天赋</span>
+                        <span>可以全选</span>
+                    </div>
+                </button>
+            )}
         </div>
     )
 }

@@ -22,6 +22,8 @@ export enum Mode {
     Classic = 'classic',
     Custom = 'custom',
     Celebrity = 'celebrity',
+    /** 作弊模式：需导入带 cheatmode 标记的存档才会出现 */
+    Cheat = 'cheat',
 }
 
 export type Log = Omit<NextResult, 'state'> & {
@@ -83,6 +85,7 @@ export const useModeChoose = () => {
             switch (mode) {
                 case Mode.Classic: return setStep(Step.Pick)
                 case Mode.Custom: return setStep(Step.Pick)
+                case Mode.Cheat: return setStep(Step.Pick)
                 case Mode.Celebrity: return setStep(Step.Chara)
             }
         },

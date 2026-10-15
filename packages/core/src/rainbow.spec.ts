@@ -8,6 +8,7 @@ import {
     DaoTalentId,
     LuckyMultiplier,
     DaoMultiplier,
+    LuckyExcludedEvents,
 } from './game'
 
 function makeState(talents: number[], intelligence: number): GameState {
@@ -141,5 +142,26 @@ describe('气运之子', () => {
         ]
         const weighted = weightEvents(candidates, makeState([], 0))
         expect(weighted.find(([id]) => id === positiveId)![1]).toBe(2)
+    })
+    test('排除名单内的事件不被加权（净收益不为正 / 噪声事件）', () => {
+        const excluded = [10217, 10314, 11290, 11291, 11335, 11346]
+        const candidates = excluded.map(id => [id, 2] as [number, number])
+        const weighted = weightEvents(candidates, makeState([LuckyTalentId], 0))
+        for (const id of excluded) {
+            expect(weighted.find(([x]) => x === id)![1]).toBe(2)
+        }
+    })
+    test('排除名单外的正向事件仍然 ×3', () => {
+        const kept = [10084, 10193, 10555, 20365, 20366]
+        const candidates = kept.map(id => [id, 2] as [number, number])
+        const weighted = weightEvents(candidates, makeState([LuckyTalentId], 0))
+        for (const id of kept) {
+            expect(weighted.find(([x]) => x === id)![1]).toBe(
+                2 * LuckyMultiplier,
+            )
+        }
+    })
+    test('排除名单共 16 个事件', () => {
+        expect(LuckyExcludedEvents.size).toBe(16)
     })
 })

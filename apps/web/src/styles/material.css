@@ -291,6 +291,12 @@ input {
     color: var(--md-on-primary-container);
 }
 
+/* 作弊模式：导入带 cheatmode 标记的存档后才会出现的第 4 个按钮 */
+.screen.mode button:nth-child(4) {
+    background: var(--md-error-container);
+    color: var(--md-on-error-container);
+}
+
 .screen.mode .name {
     font-size: 2rem;
     line-height: 1.2;
@@ -299,6 +305,10 @@ input {
 .screen.mode .description {
     flex-wrap: wrap;
     color: var(--md-on-surface-variant);
+}
+
+.screen.mode button:nth-child(4) .description {
+    color: var(--md-on-error-container);
 }
 
 .screen.mode button:nth-child(3) .description {
